@@ -1,11 +1,14 @@
 import openpyxl
-from openpyxl.styles import PatternFill, Font, Border, Alignment
+from generate_sample_shiftdata import non_empty_file_path, output_workbook, output_file_path
 
 # Load the workbook
-workbook = openpyxl.load_workbook('sample.xlsx')
+worksheet_path = input("Enter the path to the input Excel file: ")
+worksheet_path = non_empty_file_path(worksheet_path, "Enter the path to the input Excel file: ")
+workbook = openpyxl.load_workbook(worksheet_path)
 
 # Select the desired sheet
 source_sheet = workbook['Sheet1']
+new_sheet = output_workbook['Sheet']
 
 legends = {
     'M': '07:00-16:00',
@@ -16,8 +19,6 @@ legends = {
     'WO': 'Weekly Off'
 }
 
-# Create a new sheet to copy the data
-new_sheet = workbook.create_sheet('NewSheet')
 
 # Iterate over the cells in the source sheet
 def get_shift_value(cell_val):
@@ -39,24 +40,10 @@ def get_shift_value(cell_val):
 
 for row in source_sheet.iter_rows():
     for cell in row:
-        # Get the value and formatting of the cell
-
         value = get_shift_value(cell.value)
-
-        # Get the formatting of the cell
-        font = cell.font
-        fill = cell.fill
-        border = cell.border
-        alignment = cell.alignment
-
-        # Create the same cell in the new sheet
         new_cell = new_sheet.cell(row=cell.row, column=cell.column, value=value)
 
-        # Apply formatting to the new cell
-        new_cell.font = Font(**font.__dict__)
-        new_cell.fill = PatternFill(**fill.__dict__)
-        new_cell.border = Border(**border.__dict__)
-        new_cell.alignment = Alignment(**alignment.__dict__)
+
 
 # Save the workbook
-workbook.save('sample.xlsx')
+output_workbook.save(output_file_path)
