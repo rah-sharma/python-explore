@@ -15,13 +15,13 @@ def non_empty_file_path(file_path, msg):
 
 
 # Load the text file
-text_file_path = input("Enter the path to the input file: ")
-text_file_path = non_empty_file_path(text_file_path, "Enter the path to the input file: ")
+text_file_path = input("Enter the path to the input text file: ")
+text_file_path = non_empty_file_path(text_file_path, "Enter the path to the input text file: ")
 output_file_path = input("Enter the location where output file will be generated: ")
 output_file_path = non_empty_file_path(output_file_path, "Enter the location where output file will be generated: ")
 
 
-def remove_file_if_exist():
+def remove_file_if_exist(output_file_path):
     if os.path.exists(output_file_path):
         os.remove(output_file_path)
         print("File removed successfully.")
@@ -84,7 +84,7 @@ def apply_border():
             cell.border = border
 
 
-remove_file_if_exist()
+remove_file_if_exist(output_file_path)
 
 with open(text_file_path, 'r') as file:
     lines = file.readlines()
@@ -105,8 +105,8 @@ start_row = 1  # Starting row number
 end_row = 2  # Ending row number
 
 # Create a new workbook and sheet
-workbook = openpyxl.Workbook()
-sheet = workbook.active
+output_workbook = openpyxl.Workbook()
+sheet = output_workbook.active
 
 # Write the column headers
 sheet['A1'] = 'Sr. No'
@@ -127,4 +127,4 @@ apply_border()
 
 # Save the workbook
 
-workbook.save(output_file_path)
+output_workbook.save(output_file_path)
